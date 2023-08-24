@@ -65,4 +65,4 @@ jobs:
          -Danypoint.username="$USERNAME" \
          -Danypoint.password="$PASSWORD" 
          
-    - echo: mule deploy --env=sandbox      
+      echo: mule deploy --env=sandbox      
