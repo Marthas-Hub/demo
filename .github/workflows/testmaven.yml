@@ -62,4 +62,6 @@ jobs:
         SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
       run: |
         
-        mvn deploy -DskipMunitTests -DmuleDeploy -X 
+        mvn deploy -DskipMunitTests -DmuleDeploy -X \
+         -Dclient.id="$ID" \
+         -Dclient.secret="$SECRET"
