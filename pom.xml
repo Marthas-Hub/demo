@@ -37,9 +37,8 @@
 						<connectedAppClientSecret>${client.secret}</connectedAppClientSecret>
 						<connectedAppGrantType>client_credentials</connectedAppGrantType>
 						<applicationName>${app.name}</applicationName>
-						<environment>${env}</environment>
-						<workerType>MICRO</workerType>
-						<region>us-east-2</region>
+						<app.runtime>4.4.0-20220221</app.runtime>
+						<environment>sandbox</environment>
 						<workers>1</workers>
 						<objectStoreV2>true</objectStoreV2>
 					</cloudHubDeployment>
