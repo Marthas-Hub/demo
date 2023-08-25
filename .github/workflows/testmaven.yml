@@ -56,8 +56,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml    
+        
     - name: Deploy to Sandbox
       env:
         ID: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
@@ -68,3 +67,5 @@ jobs:
 
          -Dclient.id="$ID" \
          -Dclient.secret="$SECRET"
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml     
