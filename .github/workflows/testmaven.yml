@@ -63,4 +63,5 @@ jobs:
       run: |
         artifactName=$(ls *.jar | head -1)
         mvn clean package deploy -DmuleDeploy -X --file pom.xml \
-         -Dmule.artifact=$artifactName 
+         -Dmule.artifact=$artifactName \
+         
