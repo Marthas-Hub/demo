@@ -41,6 +41,7 @@ jobs:
           path: target/*.jar
         
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:    
     - name: Checkout this repo
@@ -64,5 +65,5 @@ jobs:
         mvn deploy -DskipMunitTests -DmuleDeploy -X \
 
          -Dclient.id="$ID" \
-         -Dclient.secret="$SECRET"
+         -Dclient.secret="$SECRET" \
       
