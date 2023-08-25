@@ -60,9 +60,10 @@ jobs:
       env:
         ID: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
         SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+        MAVEN_VERSION: '3.8.0'
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn clean package deploy -DmuleDeploy \
+        mvn deploy -DskipMunitTests -DmuleDeploy \
          -Dmule.artifact=$artifactName \
          -Dclient.id="$ID" \
          -Dclient.secret="$SECRET"
