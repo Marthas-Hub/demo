@@ -65,5 +65,5 @@ jobs:
         mvn deploy -DskipMunitTests -DmuleDeploy -X \
 
          -Dclient.id="$ID" \
-         -Dclient.secret="$SECRET" \
+         -Dclient.secret="$SECRET" 
       
