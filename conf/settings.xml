@@ -10,6 +10,13 @@
      <username>~~~Client~~~</username>
       <password>{e775f32e3d4849189b1b55ae16b74394}~?~{3CCA8B653EDa467DB9928C5aa2AA112F}</password>
     </server>
+	<servers>
+    <server>
+      <id>anypoint-exchange-v2</id>
+      <connectedAppClientId>${client.id}</connectedAppClientId>
+	  <connectedAppClientSecret>${client.secret}</connectedAppClientSecret>
+    </server>
+  </servers>
 </servers>
   <profiles>
         <profile>
