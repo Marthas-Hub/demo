@@ -62,4 +62,5 @@ jobs:
         SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn clean package deploy -DmuleDeploy -X --file pom.xml 
+        mvn clean package deploy -DmuleDeploy -X --file pom.xml \
+        -Dmule.artifact=$artifactName 
