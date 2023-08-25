@@ -58,8 +58,8 @@ jobs:
         name: artifacts
     - name: Deploy to Sandbox
       env:
-        ID: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
-        SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+        ID: e775f32e3d4849189b1b55ae16b74394 
+        SECRET:  3CCA8B653EDa467DB9928C5aa2AA112F 
       run: |
         
         mvn deploy -DskipMunitTests -DmuleDeploy -X \
