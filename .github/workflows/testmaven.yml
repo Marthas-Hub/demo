@@ -44,7 +44,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     env:
-       env:
         ID: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
         SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
 
@@ -52,7 +51,7 @@ jobs:
     steps:
     - name: Slack Notification
       uses: act10ns/slack@v1
-      with: 
+      with:
         status: starting
         channel: '#meetups'
         message: Starting Deployment...
