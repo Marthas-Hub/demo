@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
-    <flow name="edocuments-main">
-        <http:listener path="/*" config-ref="edocuments-httpListenerConfig">
+    <flow name="bill-payments-main">
+        <http:listener path="/api/*" config-ref="BillPayments-HTTPS_Listener_Config">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
@@ -10,7 +10,8 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router doc:name="APIkit Router" doc:id="9af2f620-40c5-4897-924e-a10377f25aa8" config-ref="edocuments-config" />
+        <set-variable value="#[attributes.headers.'x-Correlation-id' default uuid()]" doc:name="Set CorrelationId Variable" doc:id="af648ae1-a014-4ac2-8094-1cefc7936186" variableName="correlationId" />
+        <apikit:router config-ref="bill-payments-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform doc:name="Transform Message">
@@ -92,8 +93,8 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="edocuments-console">
-        <http:listener path="/console/*" config-ref="edocuments-httpListenerConfig">
+    <flow name="bill-payments-console">
+        <http:listener path="/console/*" config-ref="BillPayments-HTTPS_Listener_Config">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
@@ -102,7 +103,7 @@ output application/json
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:console config-ref="edocuments-config" />
+        <apikit:console config-ref="bill-payments-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:NOT_FOUND">
                 <ee:transform doc:name="Transform Message">
@@ -119,19 +120,25 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="get:\onUsChequeImages:edocuments-config">
-        <logger level="INFO" doc:name="StartLogger" doc:id="5878856e-e603-4308-bf1f-c861243cb3e5" message="#['flow of get Cheque images started']" />
-        <flow-ref doc:name="cheque-images-implementationFlow" doc:id="0892b44e-49d1-4d1f-a0fa-634469e0d13a" name="cheque-images-implementationFlow" />
-        <logger level="INFO" doc:name="EndLogger" doc:id="cac557a9-7ef0-4a45-9336-c4d982403184" message="#['flow of get Cheque images ended']" />
+    <flow name="get:\payees:bill-payments-config">
+        <logger level="INFO" message="get:\payees:bill-payments-config" />
     </flow>
-    <flow name="get:\eStatements:edocuments-config">
-        <logger level="INFO" doc:name="StartLogger" doc:id="951cb87e-4d19-4bb7-9810-e75ddd1ec369" message="#['get eStatemnt flow started']" />
-        <flow-ref doc:name="eStatement-List" doc:id="26db6681-1bbb-49c3-b1ba-dd60f9ca199a" name="eStatement-List" />
-        <logger level="INFO" doc:name="EndLogger" doc:id="f55e5854-0d08-497f-a74b-c5b847e1e1e3" message="#['get eStatemnt flow ended']" />
+    <flow name="post:\payments\schedules\cancel:application\json:bill-payments-config">
+        <logger level="INFO" message="post:\payments\schedules\cancel:application\json:bill-payments-config" />
     </flow>
-    <flow name="get:\eStatements\(eStatementId):edocuments-config" doc:id="341fad4f-a957-4a85-8771-bbcb183edd4a">
-        <logger level="INFO" doc:name="StartLogger" doc:id="345a0807-e224-4fdc-8920-82009fe8ca81" message="#['get eStatemntID flow started']" />
-        <flow-ref doc:name="eStatement-Download" doc:id="42c00e0d-816c-467b-a386-833896521d33" name="eStatement-Download" />
-        <logger level="INFO" doc:name="EndLogger" doc:id="71be5e6e-64e2-4881-afde-e4f95c157669" message="#['get eStatemntID flow ended']" />
+    <flow name="post:\payees:application\json:bill-payments-config">
+        <logger level="INFO" message="post:\payees:application\json:bill-payments-config" />
+    </flow>
+    <flow name="post:\payments:application\json:bill-payments-config">
+        <logger level="INFO" doc:name="Starting Logger" doc:id="4f8983ee-18f6-4c74-84ec-0c271bf6ed19" message="start post_payments flow" />
+        <flow-ref doc:name="Flow Reference" doc:id="03ba4244-f2b5-46b8-8eb9-dc7f8e5a26fa" name="postPaymentsImplementationFlow" />
+        <logger level="INFO" doc:name="End Logger" doc:id="63239328-270e-4e89-b66e-fa715fa6f86c" message="End post_payments flow" />
+        <error-handler ref="bill-payments-errorhandler" />
+    </flow>
+    <flow name="post:\payments\reversal:application\json:bill-payments-config">
+        <logger level="INFO" message="post:\payments\reversal:application\json:bill-payments-config" />
+    </flow>
+    <flow name="post:\payments\schedules:application\json:bill-payments-config">
+        <logger level="INFO" message="post:\payments\schedules:application\json:bill-payments-config" />
     </flow>
 </mule>
