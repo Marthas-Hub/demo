@@ -34,7 +34,7 @@
 						<uri>https://anypoint.mulesoft.com</uri>
 						<muleVersion>${app.runtime}</muleVersion>
 						<applicationName>demo</applicationName>
-						<environment>sandbox</environment>
+						<environment>Sandbox</environment>
 						<workers>2</workers>
 						<connectedAppClientId>${ClientID}</connectedAppClientId>
 						<connectedAppClientSecret>${ClientSecret}</connectedAppClientSecret>
