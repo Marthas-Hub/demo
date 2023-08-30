@@ -31,8 +31,8 @@ jobs:
    
     - name: Build with Maven
       env:
-        USERNAME: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
-        PASSWORD: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+        USERNAME: ${{ secrets.MULE_CLIENT_ID }}
+        PASSWORD: ${{ secrets.Mule_Client_Secret }}
       run: mvn -B package --file pom.xml  -DClientID="$USERNAME" -DClientSecret="$PASSWORD"
     - name: Stamp artifact file name with commit hash
       run: |
@@ -60,6 +60,6 @@ jobs:
         name: artifacts
     - name: Deploy to cloudhub
       env:
-        USERNAME: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
-        PASSWORD: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+        USERNAME: ${{ secrets.MULE_CLIENT_ID }}
+        PASSWORD: ${{ secrets.Mule_Client_Secret }}
       run: mvn clean package deploy -DmuleDeploy -X --file pom.xml -DClientID="$USERNAME" -DClientSecret="$PASSWORD"
