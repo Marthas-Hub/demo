@@ -62,3 +62,14 @@ jobs:
         ID: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
         SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
       run: mvn clean package deploy -DmuleDeploy -X --file pom.xml -DClientID="$ID" -DClientSecret="$SECRET" 
+    
+    - name: Archive Artifact
+      run: |
+        mv target/your-artifact.jar $GITHUB_WORKSPACE/your-artifact.jar
+      continue-on-error: true  # Continue even if the artifact is not found, to diagnose the issue
+      
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: java-artifact
+        path: your-artifact.jar  
