@@ -1,11 +1,13 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-name: Java CI with Maven
+name: Build and Deploy to Sandbox
 
 on:
   push:
-    branches: [ master ]
-  
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +27,7 @@ jobs:
         distribution: 'zulu'
         java-version: 8
     - name: Build with Maven
-      run: mvn -B package --file pom.xm
+      run: mvn -B package --file pom.xml
     - name: Stamp artifact file name with commit hash
       run: |
         artifactName1=$(ls target/*.jar | head -1)
@@ -41,18 +43,21 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v1
+    steps:    
+    - name: Checkout this repo
+      uses: actions/checkout@v3
+    - name: Cache dependencies
+      uses: actions/cache@v3
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-    - uses: actions/download-artifact@master
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: actions/download-artifact@v3
       with:
         name: artifacts
-    - name: Deploy to cloudhub
+    - name: Deploy to Sandbox
       env:
-        USERNAME: ${{ secrets.MULE_CLIENT_ID }}
-        PASSWORD: ${{ secrets.Mule_Client_Secret }}
-      run: mvn clean package deploy -DmuleDeploy -X --file pom.xml -DClientID="$USERNAME" -DClientSecret="$PASSWORD"
+        ID: ${{ secrets.CONNECTED_APP_CLIENT_ID }}
+        SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+      run: mvn clean package deploy -DmuleDeploy -X --file pom.xml -DClientID="$ID" -DClientSecret="$SECRET"   
